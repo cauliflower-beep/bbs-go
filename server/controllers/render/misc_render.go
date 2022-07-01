@@ -87,6 +87,7 @@ Parameter:
 	ref - 登录来源地址，需要控制登录成功之后跳转到该地址
 */
 func BuildLoginSuccess(user *model.User, ref string) *web.JsonResult {
+	// 生成token
 	token, err := services.UserTokenService.Generate(user.Id)
 	if err != nil {
 		return web.JsonErrorMsg(err.Error())

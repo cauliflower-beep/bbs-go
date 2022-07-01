@@ -17,6 +17,7 @@ type CheckinController struct {
 
 // PostCheckin 签到
 func (c *CheckinController) PostCheckin() *web.JsonResult {
+	// 1.获取当前登录用户
 	user := services.UserTokenService.GetCurrent(c.Ctx)
 	if err := services.UserService.CheckPostStatus(user); err != nil {
 		return web.JsonError(err)

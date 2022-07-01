@@ -15,8 +15,9 @@ type LoginController struct {
 	Ctx iris.Context
 }
 
-// 注册
+// PostSignup 注册
 func (c *LoginController) PostSignup() *web.JsonResult {
+	// 1.解析客户端参数
 	var (
 		captchaId   = c.Ctx.PostValueTrim("captchaId")
 		captchaCode = c.Ctx.PostValueTrim("captchaCode")
@@ -27,17 +28,21 @@ func (c *LoginController) PostSignup() *web.JsonResult {
 		nickname    = c.Ctx.PostValueTrim("nickname")
 		ref         = c.Ctx.FormValue("ref")
 	)
+	// 2.判断登录方式
 	loginMethod := services.SysConfigService.GetLoginMethod()
 	if !loginMethod.Password {
 		return web.JsonErrorMsg("账号密码登录/注册已禁用")
 	}
+	// 3.验证验证码是否正确
 	if !captcha.VerifyString(captchaId, captchaCode) {
 		return web.JsonError(common.CaptchaError)
 	}
+	// 4.注册
 	user, err := services.UserService.SignUp(username, email, nickname, password, rePassword)
 	if err != nil {
 		return web.JsonErrorMsg(err.Error())
 	}
+	// 5.登录成功处理
 	return render.BuildLoginSuccess(user, ref)
 }
 

@@ -228,6 +228,7 @@ func (s *userService) SignUp(username, email, nickname, password, rePassword str
 		}
 	}
 
+	// 生成用户信息
 	user := &model.User{
 		Username:   sqls.SqlNullString(username),
 		Email:      sqls.SqlNullString(email),
@@ -238,6 +239,7 @@ func (s *userService) SignUp(username, email, nickname, password, rePassword str
 		UpdateTime: dates.NowTimestamp(),
 	}
 
+	// 插入数据库
 	err = repositories.UserRepository.Create(sqls.DB(), user)
 	if err != nil {
 		return nil, err

@@ -133,6 +133,7 @@ func (s *sysConfigService) GetTokenExpireDays() int {
 	return tokenExpireDays
 }
 
+// GetLoginMethod 选择登录方式
 func (s *sysConfigService) GetLoginMethod() model.LoginMethod {
 	loginMethodStr := cache.SysConfigCache.GetValue(constants.SysConfigLoginMethod)
 

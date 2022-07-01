@@ -30,6 +30,7 @@ func IsEmail(email string) (err error) {
 		err = errors.New("邮箱格式不符合规范")
 		return
 	}
+	// 正则表达式匹配
 	pattern := `^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$`
 	matched, _ := regexp.MatchString(pattern, email)
 	if !matched {

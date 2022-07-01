@@ -13,11 +13,12 @@ type ScoreConfig struct {
 	CheckInScore     int `json:"checkInScore"`     // 签到积分
 }
 
+// 登录方式
 type LoginMethod struct {
-	Password bool `json:"password"`
-	QQ       bool `json:"qq"`
-	Github   bool `json:"github"`
-	Osc      bool `json:"osc"`
+	Password bool `json:"password"` // 账户密码登录
+	QQ       bool `json:"qq"`       // qq登录
+	Github   bool `json:"github"`   // GitHub登录
+	Osc      bool `json:"osc"`      //
 }
 
 // SysConfigResponse 配置返回结构体
