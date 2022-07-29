@@ -19,13 +19,16 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-var configFile = flag.String("config", "./bbs-go.yaml", "配置文件路径")
+// 指定配置文件路径 默认为当前路径下的 bbs-go.yaml
+//var configFile = flag.String("config", "./bbs-go.yaml", "配置文件")
+var configPath = flag.String("config", "./", "配置文件路径")
 
 func init() {
 	flag.Parse()
 
 	// 初始化配置
-	conf := config.Init(*configFile)
+	//conf := config.Init(*configFile)	// 原项目
+	conf := config.Init(*configPath)
 
 	// gorm配置
 	gormConf := &gorm.Config{}

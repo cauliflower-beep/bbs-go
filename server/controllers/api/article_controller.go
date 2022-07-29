@@ -106,7 +106,7 @@ func (c *ArticleController) GetEditBy(articleId int64) *web.JsonResult {
 		JsonResult()
 }
 
-// 编辑文章
+// PostEditBy 编辑文章
 func (c *ArticleController) PostEditBy(articleId int64) *web.JsonResult {
 	user := services.UserTokenService.GetCurrent(c.Ctx)
 	if err := services.UserService.CheckPostStatus(user); err != nil {

@@ -33,11 +33,12 @@ func newUserTokenCache() *userTokenCache {
 	}
 }
 
+// Get 获取用户token
 func (c *userTokenCache) Get(token string) *model.UserToken {
 	if len(token) == 0 {
 		return nil
 	}
-	val, err := c.cache.Get(token)
+	val, err := c.cache.Get(token) // Get 返回与 Key 关联的值或调用底层 LoaderFunc 以加载值（如果它不存在）。
 	if err != nil {
 		return nil
 	}

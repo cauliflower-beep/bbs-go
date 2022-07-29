@@ -59,9 +59,9 @@ func (s *userTokenService) GetCurrentUserId(ctx iris.Context) int64 {
 	return 0
 }
 
-// 获取当前登录用户
+// GetCurrent 获取当前登录用户
 func (s *userTokenService) GetCurrent(ctx iris.Context) *model.User {
-	token := s.GetUserToken(ctx)
+	token := s.GetUserToken(ctx) // 用户请求token
 	userToken := cache.UserTokenCache.Get(token)
 	// 没找到授权
 	if userToken == nil || userToken.Status == constants.StatusDeleted {
@@ -97,7 +97,7 @@ func (s *userTokenService) Signout(ctx iris.Context) error {
 	return repositories.UserTokenRepository.UpdateColumn(sqls.DB(), userToken.Id, "status", constants.StatusDeleted)
 }
 
-// 从请求体中获取UserToken
+// GetUserToken 从请求体中获取UserToken
 func (s *userTokenService) GetUserToken(ctx iris.Context) string {
 	userToken := ctx.FormValue("userToken")
 	if len(userToken) > 0 {

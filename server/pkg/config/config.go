@@ -1,10 +1,7 @@
 package config
 
 import (
-	"io/ioutil"
-
-	"github.com/sirupsen/logrus"
-	"gopkg.in/yaml.v2"
+	"github.com/spf13/viper"
 )
 
 var Instance *Config
@@ -101,11 +98,35 @@ type Config struct {
 }
 
 func Init(filename string) *Config {
-	Instance = &Config{}
-	if yamlFile, err := ioutil.ReadFile(filename); err != nil {
-		logrus.Error(err)
-	} else if err = yaml.Unmarshal(yamlFile, Instance); err != nil {
-		logrus.Error(err)
+	// 项目中原生的读取配置的方法
+	//Instance = &Config{}
+	//if yamlFile, err := ioutil.ReadFile(filename); err != nil {
+	//	logrus.Error(err)
+	//} else if err = yaml.Unmarshal(yamlFile, Instance); err != nil {
+	//	logrus.Error(err)
+	//}
+
+	/*
+			利用viper读配置有几个优点：
+			1.支持多种格式的配置文件， JSON/TOML/YAML/HCL/envfile/Java properties等，
+		      原项目中的 yaml.Unmarshal 只支持解析 yaml(java常用)；
+			2.可以设置监听配置文件的修改，修改时自动加载新的配置；这是最大的魅力，它使得重启服务器才能使配置生效的日子一去不复返！
+			3.从环境变量、命令行选项和io。reader中读取配置；
+			4.从远程配置系统中读取和监听修改，如 etcd/Consul；
+			5.代码逻辑中显示设置键值。
+	*/
+	conf := viper.New()
+
+	conf.AddConfigPath(filename) // 设置读取的文件路径
+	conf.SetConfigName("bbs-go") // 设置读取的文件名
+	conf.SetConfigType("yaml")
+	if err := conf.ReadInConfig(); err != nil {
+		panic(err)
 	}
+	// 将配置文件内容映射到 struct 中
+	if err := conf.Unmarshal(&Instance); err != nil { // 注意这里 参数 必须是指针类型！
+		panic(err)
+	}
+
 	return Instance
 }
