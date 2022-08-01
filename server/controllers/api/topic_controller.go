@@ -38,10 +38,10 @@ func (c *TopicController) GetNode() *web.JsonResult {
 	return web.JsonData(render.BuildNode(node))
 }
 
-// 发表帖子
+// PostCreate 发表帖子
 func (c *TopicController) PostCreate() *web.JsonResult {
 	user := services.UserTokenService.GetCurrent(c.Ctx)
-	if err := services.UserService.CheckPostStatus(user); err != nil {
+	if err := services.UserService.CheckPostStatus(user); err != nil { // 发表内容时检查用户状态
 		return web.JsonError(err)
 	}
 	form := model.GetCreateTopicForm(c.Ctx)

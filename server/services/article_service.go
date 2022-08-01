@@ -307,7 +307,7 @@ func (s *articleService) ScanDescWithDate(dateFrom, dateTo int64, callback func(
 	}
 }
 
-// rss
+// rss 订阅
 func (s *articleService) GenerateRss() {
 	articles := repositories.ArticleRepository.Find(sqls.DB(),
 		sqls.NewCnd().Where("status = ?", constants.StatusOk).Desc("id").Limit(200))

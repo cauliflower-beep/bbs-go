@@ -17,6 +17,7 @@ type userTokenCache struct {
 	cache cache.LoadingCache
 }
 
+// newUserTokenCache 生成 token 缓存
 func newUserTokenCache() *userTokenCache {
 	return &userTokenCache{
 		cache: cache.NewLoadingCache(
@@ -28,7 +29,7 @@ func newUserTokenCache() *userTokenCache {
 				return
 			},
 			cache.WithMaximumSize(1000),
-			cache.WithExpireAfterAccess(60*time.Minute),
+			cache.WithExpireAfterAccess(60*time.Minute), // cache 过期时间
 		),
 	}
 }

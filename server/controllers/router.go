@@ -53,7 +53,7 @@ func Router() {
 		_, _ = i.HTML("<h1>Powered by bbs-go</h1>")
 	})
 
-	// api
+	// site api
 	mvc.Configure(app.Party("/api"), func(m *mvc.Application) {
 		m.Party("/topic").Handle(new(api.TopicController))
 		m.Party("/article").Handle(new(api.ArticleController))

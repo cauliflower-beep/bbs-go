@@ -530,7 +530,8 @@ func (s *userService) VerifyEmail(token string) (string, error) {
 		return "", errors.New("验证邮件已过期")
 	}
 	err := sqls.DB().Transaction(func(tx *gorm.DB) error {
-		if err := repositories.UserRepository.UpdateColumn(tx, emailCode.UserId, "email_verified", true); err != nil {
+		if err := repositories.UserRepository.UpdateColumn(tx, emailCode.UserId,
+			"email_verified", true); err != nil {
 			return err
 		}
 		cache.UserCache.Invalidate(emailCode.UserId)
@@ -548,14 +549,15 @@ func (s *userService) CheckPostStatus(user *model.User) *web.CodeError {
 		return common.ErrorNotLogin
 	}
 	if user.Status != constants.StatusOk {
-		return common.UserDisabled
+		return common.UserDisabled // 账号已禁用
 	}
 	if user.IsForbidden() {
-		return common.ForbiddenError
+		return common.ForbiddenError // 用户已被禁言
 	}
 	observeSeconds := SysConfigService.GetInt(constants.SysConfigUserObserveSeconds)
 	if user.InObservationPeriod(observeSeconds) {
-		return web.NewError(common.InObservationPeriod.Code, "账号尚在观察期，观察期时长："+strconv.Itoa(observeSeconds)+"秒，请稍后再试")
+		return web.NewError(common.InObservationPeriod.Code,
+			"账号尚在观察期，观察期时长："+strconv.Itoa(observeSeconds)+"秒，请稍后再试")
 	}
 	return nil
 }
