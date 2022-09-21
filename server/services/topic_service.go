@@ -30,6 +30,7 @@ import (
 	"bbs-go/repositories"
 )
 
+// TopicService 单例
 var TopicService = newTopicService()
 
 func newTopicService() *topicService {
@@ -124,6 +125,7 @@ func (s *topicService) Undelete(id int64) error {
 
 // Publish 发表
 func (s *topicService) Publish(userId int64, form model.CreateTopicForm) (*model.Topic, *web.CodeError) {
+	// 1.内容校验
 	if form.Type == constants.TopicTypeTweet {
 		if strs.IsBlank(form.Content) && len(form.ImageList) == 0 {
 			return nil, web.NewErrorMsg("内容或图片不能为空")

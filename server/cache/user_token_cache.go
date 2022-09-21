@@ -28,7 +28,7 @@ func newUserTokenCache() *userTokenCache {
 				}
 				return
 			},
-			cache.WithMaximumSize(1000),
+			cache.WithMaximumSize(1000),                 // 限制缓存中的条目数
 			cache.WithExpireAfterAccess(60*time.Minute), // cache 过期时间
 		),
 	}
@@ -49,6 +49,7 @@ func (c *userTokenCache) Get(token string) *model.UserToken {
 	return nil
 }
 
+// Invalidate 丢弃给定token的缓存值
 func (c *userTokenCache) Invalidate(token string) {
 	c.cache.Invalidate(token)
 }

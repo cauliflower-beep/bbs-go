@@ -50,6 +50,7 @@ type ImageDTO struct {
 	Url string `json:"url"`
 }
 
+// GetCreateTopicForm 发帖表单
 func GetCreateTopicForm(ctx iris.Context) CreateTopicForm {
 	var (
 		topicType = params.FormValueIntDefault(ctx, "type", int(constants.TopicTypeTopic))

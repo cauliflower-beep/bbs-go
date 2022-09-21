@@ -40,16 +40,22 @@ func (c *TopicController) GetNode() *web.JsonResult {
 
 // PostCreate 发表帖子
 func (c *TopicController) PostCreate() *web.JsonResult {
+	// 1.从缓存中获取当前登录用户
 	user := services.UserTokenService.GetCurrent(c.Ctx)
-	if err := services.UserService.CheckPostStatus(user); err != nil { // 发表内容时检查用户状态
+
+	// 2.检查用户状态(是否被禁言等)
+	if err := services.UserService.CheckPostStatus(user); err != nil {
 		return web.JsonError(err)
 	}
+
+	// 3.获取提交的帖子表单数据
 	form := model.GetCreateTopicForm(c.Ctx)
 
 	if err := spam.CheckTopic(user, form); err != nil {
 		return web.JsonErrorMsg(err.Error())
 	}
 
+	// 4.发帖
 	topic, err := services.TopicService.Publish(user.Id, form)
 	if err != nil {
 		return web.JsonError(err)
