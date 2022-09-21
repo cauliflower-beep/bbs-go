@@ -19,7 +19,7 @@ type LoginController struct {
 func (c *LoginController) PostSignup() *web.JsonResult {
 	// 1.解析客户端参数
 	var (
-		captchaId   = c.Ctx.PostValueTrim("captchaId")
+		captchaId   = c.Ctx.PostValueTrim("captchaId") // 验证码id
 		captchaCode = c.Ctx.PostValueTrim("captchaCode")
 		email       = c.Ctx.PostValueTrim("email")
 		username    = c.Ctx.PostValueTrim("username")
@@ -28,6 +28,7 @@ func (c *LoginController) PostSignup() *web.JsonResult {
 		nickname    = c.Ctx.PostValueTrim("nickname")
 		ref         = c.Ctx.FormValue("ref")
 	)
+
 	// 2.判断登录方式
 	loginMethod := services.SysConfigService.GetLoginMethod()
 	if !loginMethod.Password {
@@ -42,7 +43,7 @@ func (c *LoginController) PostSignup() *web.JsonResult {
 	if err != nil {
 		return web.JsonErrorMsg(err.Error())
 	}
-	// 5.登录成功处理
+	// 5.登录成功处理，生成token
 	return render.BuildLoginSuccess(user, ref)
 }
 
@@ -66,6 +67,7 @@ func (c *LoginController) PostSignin() *web.JsonResult {
 	if err != nil {
 		return web.JsonErrorMsg(err.Error())
 	}
+	// 生成token
 	return render.BuildLoginSuccess(user, ref)
 }
 

@@ -61,8 +61,8 @@ func (s *userTokenService) GetCurrentUserId(ctx iris.Context) int64 {
 
 // GetCurrent 获取当前登录用户
 func (s *userTokenService) GetCurrent(ctx iris.Context) *model.User {
-	token := s.GetUserToken(ctx) // 用户请求token
-	userToken := cache.UserTokenCache.Get(token)
+	token := s.GetUserToken(ctx)                 // 用户请求token,来自url、form表单 或 请求headers
+	userToken := cache.UserTokenCache.Get(token) // 根据请求 token 从查找缓存中是否有授权
 	// 没找到授权
 	if userToken == nil || userToken.Status == constants.StatusDeleted {
 		return nil
@@ -71,6 +71,7 @@ func (s *userTokenService) GetCurrent(ctx iris.Context) *model.User {
 	if userToken.ExpiredAt <= dates.NowTimestamp() {
 		return nil
 	}
+	// 根据用户id，从缓存中获取用户信息
 	user := cache.UserCache.Get(userToken.UserId)
 	if user == nil || user.Status != constants.StatusOk {
 		return nil
@@ -106,7 +107,7 @@ func (s *userTokenService) GetUserToken(ctx iris.Context) string {
 	return ctx.GetHeader("X-User-Token")
 }
 
-// 生成
+// Generate 生成 token
 func (s *userTokenService) Generate(userId int64) (string, error) {
 	token := strs.UUID()
 	tokenExpireDays := SysConfigService.GetTokenExpireDays()

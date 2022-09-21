@@ -34,7 +34,7 @@ func newUserTokenCache() *userTokenCache {
 	}
 }
 
-// Get 获取用户token
+// Get 查找缓存中是否有 token 信息
 func (c *userTokenCache) Get(token string) *model.UserToken {
 	if len(token) == 0 {
 		return nil

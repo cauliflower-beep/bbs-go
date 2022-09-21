@@ -32,6 +32,7 @@ func (r *userTokenRepository) Get(db *gorm.DB, id int64) *model.UserToken {
 	return ret
 }
 
+// Take 从数据库中取出用户 token 数据
 func (r *userTokenRepository) Take(db *gorm.DB, where ...interface{}) *model.UserToken {
 	ret := &model.UserToken{}
 	if err := db.Take(ret, where...).Error; err != nil {
